@@ -1,0 +1,12 @@
+
+/host/dist
+/host/node_modules
+/host/package-lock.json
+
+/service1/dist
+/service1/node_modules
+/service1/package-lock.json
+
+/service2/dist
+/service2/node_modules
+/service2/package-lock.json

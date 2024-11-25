@@ -1,4 +1,5 @@
 
+/node_modules
 /host/dist
 /host/node_modules
 /host/package-lock.json

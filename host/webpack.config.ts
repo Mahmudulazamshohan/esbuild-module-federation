@@ -5,7 +5,6 @@ import { Configuration } from 'webpack';
 const { ModuleFederationPlugin } = require('webpack').container;
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const deps = require('./package.json').dependencies;
-const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const SpeedMeasurePlugin = require('speed-measure-webpack-plugin');
 const smp = new SpeedMeasurePlugin();
 
@@ -38,13 +37,12 @@ const config: any = smp.wrap({
   },
   devtool: 'source-map',
   plugins: [
-    new ReactRefreshWebpackPlugin({ overlay: false }),
     new ModuleFederationPlugin({
       name: 'host',
       filename: 'remoteEntry.js',
       remotes: {
-        service1: 'service1@http://localhost:3001/remoteEntry.js',
-        service2: 'service2@http://localhost:3002/remoteEntry.js',
+        service1: `service1@${process?.env?.SERVICE1_URL || 'http://localhost:3001'}/remoteEntry.js`,
+        service2: `service2@${process?.env?.SERVICE2_URL || 'http://localhost:3002'}/remoteEntry.js`,
       },
       shared: {
         ...deps,
@@ -71,9 +69,13 @@ const config: any = smp.wrap({
   module: {
     rules: [
       {
-        test: /\.(js|jsx|tsx|ts)$/,
+        test: /\.(ts|tsx)$/,
         loader: "esbuild-loader",
         exclude: /node_modules/,
+        options: {
+          loader: 'tsx',
+          target: 'es2015',
+        },
       },
     ],
   },
